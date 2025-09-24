@@ -5,6 +5,7 @@ GRID_SIZE = 16
 GRID_COUNT = 32
 cells = {}
 draw_color = "black"
+bg_color = '#DBFFCA'
 
 # Создание главного окна
 root = tk.Tk()
@@ -16,7 +17,7 @@ canvas = tk.Canvas(
     root,
     width=GRID_SIZE * GRID_COUNT,
     height=GRID_SIZE * GRID_COUNT,
-    bg="white"
+    bg=bg_color
 )
 canvas.pack()
 
@@ -30,8 +31,12 @@ def paint(event, color):
         cells[(x, y)] = color
 
 # Функция рисования карандашом
-def draw(event):
+def draw(event):	
     paint(event, draw_color)
+    
+# Функция стирания карандашом
+def rubber(event):	
+    paint(event, bg_color)
 
 # Функция отрисовки сетки
 def draw_grid():
@@ -45,17 +50,21 @@ def draw_grid():
             canvas.create_rectangle(
                 x1, y1, x2, y2,
                 outline="lightgray",
-                fill="white",
+                fill=bg_color,
                 tags=f"cell_{x}_{y}"
             )
 
-            cells[(x, y)] = "white"
+            cells[(x, y)] = bg_color
 			
 draw_grid()
 
 # Привязка событий левой кнопки мыши
 canvas.bind("<Button-1>", draw)
 canvas.bind("<B1-Motion>", draw)
+
+# Привязка событий правой кнопки мыши
+canvas.bind("<Button-3>", rubber)
+canvas.bind("<B3-Motion>", rubber)
 
 # Запуск главного цикла программы
 root.mainloop()
