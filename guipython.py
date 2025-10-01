@@ -6,6 +6,7 @@ GRID_COUNT = 32
 cells = {}
 draw_color = "black"
 bg_color = '#DBFFCA'
+fill_color = 'red'
 
 # Создание главного окна
 root = tk.Tk()
@@ -58,6 +59,20 @@ def draw_grid():
 			
 draw_grid()
 
+# функция заливки фона
+def fill_background():
+	for (x, y), color in cells.items():
+		if color == bg_color:
+			canvas.itemconfig(f'cell_{x}_{y}', fill=fill_color)
+			cells[(x, y)] = fill_color
+
+# функция очистки
+def clear_background():
+	for (x, y), color in cells.items():		
+		canvas.itemconfig(f'cell_{x}_{y}', fill=bg_color)
+		cells[(x, y)] = bg_color
+
+
 # Привязка событий левой кнопки мыши
 canvas.bind("<Button-1>", draw)
 canvas.bind("<B1-Motion>", draw)
@@ -65,6 +80,18 @@ canvas.bind("<B1-Motion>", draw)
 # Привязка событий правой кнопки мыши
 canvas.bind("<Button-3>", rubber)
 canvas.bind("<B3-Motion>", rubber)
+
+# Создаем панель инструментов
+toolbar = tk.Frame(root)
+toolbar.pack(pady=5)
+
+# кнопка заливки фона
+fill_btn = tk.Button(toolbar, text='залить фон', command=fill_background)
+fill_btn.pack(side=tk.LEFT, padx=5)
+
+# кнопка очистки фона
+clear_btn = tk.Button(toolbar, text='очистить все!', command=clear_background)
+clear_btn.pack(side=tk.LEFT, padx=5)
 
 # Запуск главного цикла программы
 root.mainloop()
